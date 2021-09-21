@@ -67,18 +67,20 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
     }
   }
 
-  Future<List<DefaultListItemFormField>> getListItem() async {
+  Future<List<ArsakListItemFormField>> getArsakListItem() async {
     var defaultListItems = await _registrationRepository.getListItem(0);
 
-    var mappedListItemFormFields = defaultListItems.map((e) => DefaultListItemFormField.dirty(e)).toList();
+    var mappedListItemFormFields = defaultListItems.map((e) => ArsakListItemFormField.dirty(e)).toList();
 
     return mappedListItemFormFields;
+  }
 
-    // var listitemElement1 = const DefaultListItem(text: 'Påkjørt av motorkjøretøy', id: 1);
-    // var listitemElement2 = const DefaultListItem(text: 'Påkjørt av tog', id: 2);
-    // var listitemElement5 = const DefaultListItem();
-    //
-    // return [listitemElement5, listitemElement1, listitemElement2];
+  Future<List<KjoretoyListItemFormField>> getKjoretoyListItem() async {
+    var defaultListItems = await _registrationRepository.getListItem(0);
+
+    var mappedListItemFormFields = defaultListItems.map((e) => KjoretoyListItemFormField.dirty(e)).toList();
+
+    return mappedListItemFormFields;
   }
 
   // LoginState _mapPasswordChangedToState(

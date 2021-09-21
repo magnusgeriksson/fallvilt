@@ -9,8 +9,12 @@ class RegistrationForm extends StatelessWidget {
 
   // set cubit(RegistrationCubit cubit) {}
 
-  Future<List<DefaultListItemFormField>> getList(BuildContext context) {
-    return context.read<RegistrationBloc>().getListItem();
+  Future<List<ArsakListItemFormField>> getArsakList(BuildContext context) {
+    return context.read<RegistrationBloc>().getArsakListItem();
+  }
+
+  Future<List<KjoretoyListItemFormField>> getKjoretoyList(BuildContext context) {
+    return context.read<RegistrationBloc>().getKjoretoyListItem();
   }
 
   @override
@@ -77,8 +81,8 @@ class RegistrationForm extends StatelessWidget {
               children: [
                 Expanded(
                   child: FutureBuilder(
-                    future: getList(context),
-                    builder: (BuildContext context, AsyncSnapshot<List<DefaultListItemFormField>> snapshot) {
+                    future: getArsakList(context),
+                    builder: (BuildContext context, AsyncSnapshot<List<ArsakListItemFormField>> snapshot) {
                       var widget = snapshot.hasData
                           ? arsakDropdown(snapshot.data)
                           // Text("TEST")
@@ -95,8 +99,8 @@ class RegistrationForm extends StatelessWidget {
                 children: [
                   Expanded(
                     child: FutureBuilder(
-                      future: getList(context),
-                      builder: (BuildContext context, AsyncSnapshot<List<DefaultListItemFormField>> snapshot) {
+                      future: getKjoretoyList(context),
+                      builder: (BuildContext context, AsyncSnapshot<List<KjoretoyListItemFormField>> snapshot) {
                         var widget = snapshot.hasData ? kjoretoyDropdown(snapshot.data) : Text("ANNEN TEST");
 
                         return widget;
