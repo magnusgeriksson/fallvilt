@@ -1,4 +1,4 @@
-import 'package:fallvilt/widgets/widgets.dart';
+import 'package:fallvilt/screens/my_registrations_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
@@ -19,44 +19,54 @@ class MainScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Image(image: AssetImage('assets/icons/fallvilt.png')),
-            const Text(
-              "Fallvilt",
-              style: TextStyle(fontSize: 30),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
-                    onPressed: () => print("Ny"),
-                    icon: Icon(Icons.add),
-                    label: Text("Ny registrering"),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 30),
+              child: Column(
+                children: const [
+                  Image(image: AssetImage('assets/icons/fallvilt.png')),
+                  Text(
+                    "Fallvilt",
+                    style: TextStyle(fontSize: 30),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ElevatedButton.icon(
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                           minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
                       onPressed: () => print("Ny"),
-                      icon: Icon(Icons.text_snippet),
-                      label: Text("Gå til utkast")),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
-                    onPressed: () => print("Ny"),
-                    icon: Icon(Icons.send),
-                    label: Text("Gå til overførte"),
+                      icon: const Icon(Icons.add),
+                      label: const Text("Ny registrering"),
+                    ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
+                        onPressed: () => Navigator.push(context, MyRegistrationsScreen.route()),
+                        icon: const Icon(Icons.text_snippet),
+                        label: const Text("Gå til utkast")),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
+                      onPressed: () => print("Ny"),
+                      icon: const Icon(Icons.send),
+                      label: const Text("Gå til overførte"),
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         ),
