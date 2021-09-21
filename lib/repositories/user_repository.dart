@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:fallvilt/models/models.dart';
 import 'package:uuid/uuid.dart';
+
+import 'models/models.dart';
 
 class UserRepository {
   User? _user;
