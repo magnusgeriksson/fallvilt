@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fallvilt/models/models.dart';
+import 'package:fallvilt/repositories/models/models.dart';
 import 'package:fallvilt/repositories/repositories.dart';
+
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 

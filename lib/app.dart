@@ -3,6 +3,7 @@ import 'package:fallvilt/screens/login_screen.dart';
 import 'package:fallvilt/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'bloc/bloc.dart';
 
 class App extends StatelessWidget {
@@ -17,20 +18,29 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: authenticationRepository,
+        ),
+        RepositoryProvider<RegistrationRepository>(
+          create: (context) => RegistrationRepository(),
+        )
+      ],
       child: BlocProvider(
         create: (_) => AuthenticationBloc(
           authenticationRepository: authenticationRepository,
           userRepository: userRepository,
         ),
-        child: AppView(),
+        child: const AppView(),
       ),
     );
   }
 }
 
 class AppView extends StatefulWidget {
+  const AppView({Key? key}) : super(key: key);
+
   @override
   _AppViewState createState() => _AppViewState();
 }
@@ -50,7 +60,7 @@ class _AppViewState extends State<AppView> {
               switch (state.status) {
                 case AuthenticationStatus.authenticated:
                   _navigator.pushAndRemoveUntil<void>(
-                    MainScreen.route(),
+                    RegistrationScreen.route(),
                     (route) => false,
                   );
                   break;
