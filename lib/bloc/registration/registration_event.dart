@@ -25,6 +25,15 @@ class RegistrationArsakChanged extends RegistrationEvent {
   List<Object> get props => [arsak];
 }
 
+class RegistrationStedsnavnChanged extends RegistrationEvent {
+  const RegistrationStedsnavnChanged(this.stedsnavn);
+
+  final String stedsnavn;
+
+  @override
+  List<Object> get props => [stedsnavn];
+}
+
 // class LoginPasswordChanged extends RegistrationEvent {
 //   const LoginPasswordChanged(this.password);
 //

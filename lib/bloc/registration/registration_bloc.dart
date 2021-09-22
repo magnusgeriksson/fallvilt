@@ -38,7 +38,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
     RegistrationFormState state,
   ) {
     return state.copyWith(
-      status: Formz.validate([state.hendelsesDato]),
+      // status: Formz.validate([state.hendelsesDato]),
       arsak: event.arsak,
     );
   }
@@ -48,8 +48,19 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
     RegistrationFormState state,
   ) {
     return state.copyWith(
-      status: Formz.validate([state.hendelsesDato]),
+      // status: Formz.validate([state.hendelsesDato]),
       kjoretoy: event.kjoretoy,
+    );
+  }
+
+  RegistrationFormState _mapStedsnavnChangedToState(
+    RegistrationStedsnavnChanged event,
+    RegistrationFormState state,
+  ) {
+    var stedsnavn = StedsnavnTextField.dirty(event.stedsnavn);
+
+    return state.copyWith(
+      stedsnavn: stedsnavn,
     );
   }
 
@@ -64,6 +75,10 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
     if (event is RegistrationArsakChanged) {
       print(event);
       yield _mapArsakChangedToState(event, state);
+    }
+    if (event is RegistrationStedsnavnChanged) {
+      print(event);
+      yield _mapStedsnavnChangedToState(event, state);
     }
   }
 
@@ -94,21 +109,21 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
   //   );
   // }
   //
-  // Stream<LoginState> _mapLoginSubmittedToState(
-  //     LoginSubmitted event,
-  //     LoginState state,
-  //     ) async* {
-  //   if (state.status.isValidated) {
-  //     yield state.copyWith(status: FormzStatus.submissionInProgress);
-  //     try {
-  //       await _authenticationRepository.logIn(
-  //         username: state.username.value,
-  //         password: state.password.value,
-  //       );
-  //       yield state.copyWith(status: FormzStatus.submissionSuccess);
-  //     } on Exception catch (_) {
-  //       yield state.copyWith(status: FormzStatus.submissionFailure);
-  //     }
-  //   }
-  // }
+  Stream<RegistrationFormState> _mapLoginSubmittedToState(
+    LoginSubmitted event,
+    RegistrationFormState state,
+  ) async* {
+    if (state.status.isValidated) {
+      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      try {
+        // await _authenticationRepository.logIn(
+        //   username: state.username.value,
+        //   password: state.password.value,
+        // );
+        yield state.copyWith(status: FormzStatus.submissionSuccess);
+      } on Exception catch (_) {
+        yield state.copyWith(status: FormzStatus.submissionFailure);
+      }
+    }
+  }
 }

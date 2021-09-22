@@ -4,18 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'widgets.dart';
+
 class RegistrationForm extends StatelessWidget {
   const RegistrationForm({Key? key}) : super(key: key);
-
-  // set cubit(RegistrationCubit cubit) {}
-
-  Future<List<ArsakListItemFormField>> getArsakList(BuildContext context) {
-    return context.read<RegistrationBloc>().getArsakListItem();
-  }
-
-  Future<List<KjoretoyListItemFormField>> getKjoretoyList(BuildContext context) {
-    return context.read<RegistrationBloc>().getKjoretoyListItem();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +41,7 @@ class RegistrationForm extends StatelessWidget {
         }
 
         Widget kjoretoyDropdown(List<KjoretoyListItemFormField>? items) {
-          var what = items
+          var listItems = items
               ?.map((e) => DropdownMenuItem<KjoretoyListItemFormField>(
                     value: e,
                     child: Text(e.value.text),
@@ -57,7 +49,7 @@ class RegistrationForm extends StatelessWidget {
               .toList();
 
           var dropdown = DropdownButtonFormField<KjoretoyListItemFormField>(
-            items: what,
+            items: listItems,
             onChanged: (value) {
               if (value == null) return;
               context.read<RegistrationBloc>().add(RegistrationKjoretoyChanged(value));
@@ -76,17 +68,22 @@ class RegistrationForm extends StatelessWidget {
 
         return Column(
           children: [
-            Text('${state.arsak.value.text}'),
+            Text(state.arsak.value.text),
+            TextField(
+              key: const Key('registrationForm_stedsnavnInput_textField'),
+              onChanged: (stedsnavn) => context.read<RegistrationBloc>().add(RegistrationStedsnavnChanged(stedsnavn)),
+              decoration: InputDecoration(
+                labelText: 'Stedsnavn',
+                errorText: state.stedsnavn.invalid ? ' ' : null,
+              ),
+            ),
             Row(
               children: [
                 Expanded(
                   child: FutureBuilder(
-                    future: getArsakList(context),
+                    future: context.read<RegistrationBloc>().getArsakListItem(),
                     builder: (BuildContext context, AsyncSnapshot<List<ArsakListItemFormField>> snapshot) {
-                      var widget = snapshot.hasData
-                          ? arsakDropdown(snapshot.data)
-                          // Text("TEST")
-                          : Text("ANNEN TEST");
+                      var widget = snapshot.hasData ? arsakDropdown(snapshot.data) : const Text('ANNEN TEST');
 
                       return widget;
                     },
@@ -99,32 +96,19 @@ class RegistrationForm extends StatelessWidget {
                 children: [
                   Expanded(
                     child: FutureBuilder(
-                      future: getKjoretoyList(context),
+                      future: context.read<RegistrationBloc>().getKjoretoyListItem(),
                       builder: (BuildContext context, AsyncSnapshot<List<KjoretoyListItemFormField>> snapshot) {
-                        var widget = snapshot.hasData ? kjoretoyDropdown(snapshot.data) : Text("ANNEN TEST");
+                        var widget = snapshot.hasData ? kjoretoyDropdown(snapshot.data) : const Text("ANNEN TEST");
 
                         return widget;
                       },
                     ),
                   ),
-
-                  // Expanded(
-                  //   child: DropdownButtonFormField<DefaultListItem>(
-                  //     items: itemList.toList(),
-                  //     onChanged: (value) => context.read<RegistrationCubit>().setKjotetoyListItem(value),
-                  //     decoration: InputDecoration(
-                  //       contentPadding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                  //       filled: true,
-                  //       fillColor: Colors.grey[200],
-                  //       hintText: 'Kjøretøy',
-                  //       errorText: state.arsakListItem.invalid ? 'Error' : '',
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ],
             // DatePicker(callback: (value) => context.read<RegistrationBloc>().selectDate(value)),
+            DatePicker(callback: (value) {}),
             Row(
               children: [
                 Expanded(

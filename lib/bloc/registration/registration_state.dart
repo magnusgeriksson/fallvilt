@@ -19,30 +19,34 @@ part of 'registration_bloc.dart';
 class RegistrationFormState extends Equatable {
   const RegistrationFormState(
       {this.status = FormzStatus.pure,
+      this.stedsnavn = const StedsnavnTextField.dirty(),
       this.hendelsesDato = const DateField.pure(),
       this.arsak = const ArsakListItemFormField.pure(),
       this.kjoretoy = const KjoretoyListItemFormField.pure()});
 
   RegistrationFormState copyWith(
       {FormzStatus? status,
+      StedsnavnTextField? stedsnavn,
       DateField? hendelsesDato,
       ArsakListItemFormField? arsak,
       KjoretoyListItemFormField? kjoretoy,
       RegistrationStatus? regStatus}) {
     return RegistrationFormState(
         status: status ?? this.status,
+        stedsnavn: stedsnavn ?? this.stedsnavn,
         hendelsesDato: hendelsesDato ?? this.hendelsesDato,
         kjoretoy: kjoretoy ?? this.kjoretoy,
         arsak: arsak ?? this.arsak);
   }
 
   final FormzStatus status;
+  final StedsnavnTextField stedsnavn;
   final DateField hendelsesDato;
   final ArsakListItemFormField arsak;
   final KjoretoyListItemFormField kjoretoy;
 
   @override
-  List<Object> get props => [status, hendelsesDato, arsak, kjoretoy];
+  List<Object> get props => [status, stedsnavn, hendelsesDato, arsak, kjoretoy];
 }
 
 class SetKjotetoyListItem extends RegistrationFormState {}
