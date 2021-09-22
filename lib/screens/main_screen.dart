@@ -51,7 +51,7 @@ class MainScreen extends StatelessWidget {
                     child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
-                        onPressed: () => Navigator.push(context, MyRegistrationsScreen.route()),
+                        onPressed: () => Navigator.push(context, MyRegistrationsScreen.route(0)),
                         icon: const Icon(Icons.text_snippet),
                         label: const Text("Gå til utkast")),
                   ),
@@ -60,7 +60,7 @@ class MainScreen extends StatelessWidget {
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                           minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
-                      onPressed: () => print("Ny"),
+                      onPressed: () => Navigator.push(context, MyRegistrationsScreen.route(1)),
                       icon: const Icon(Icons.send),
                       label: const Text("Gå til overførte"),
                     ),
