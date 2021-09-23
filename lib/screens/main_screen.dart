@@ -41,6 +41,18 @@ class MainScreen extends StatelessWidget {
     );
   }
 
+  Widget buildButton(VoidCallback onPressed, IconData iconData, String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
+        onPressed: onPressed,
+        icon: Icon(iconData),
+        label: Text(label),
+      ),
+    );
+  }
+
   Widget buildButtonColumn(BuildContext context, int antallUtkast, int antallOverforte) {
     var utkastTekst = antallUtkast == 0 ? "Gå til utkast" : "Gå til utkast ($antallUtkast)";
     var overforteTekst = antallOverforte == 0 ? "Gå til utkast" : "Gå til utkast ($antallOverforte)";
@@ -66,38 +78,13 @@ class MainScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
-                    onPressed: () => print("Ny"),
-                    icon: const Icon(Icons.add),
-                    label: const Text("Ny registrering"),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
-                      onPressed: () => Navigator.push(context, MyRegistrationsScreen.route(0)),
-                      icon: const Icon(Icons.text_snippet),
-                      label: Text(utkastTekst)),
-                ),
-                Theme(
-                  data: Theme.of(context),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(250, 50), shape: const BeveledRectangleBorder()),
-                      onPressed: () => Navigator.push(context, MyRegistrationsScreen.route(1)),
-                      icon: const Icon(Icons.send),
-                      label: Text(overforteTekst),
-                    ),
-                  ),
-                ),
+                buildButton(() => print("NY"), Icons.add, "Ny registrering"),
+                buildButton(() => Navigator.push(context, MyRegistrationsScreen.route(MyRegistrationsScreen.utkastTab)),
+                    Icons.text_snippet, utkastTekst),
+                buildButton(
+                    () => Navigator.push(context, MyRegistrationsScreen.route(MyRegistrationsScreen.overforteTab)),
+                    Icons.send,
+                    overforteTekst),
               ],
             ),
           )

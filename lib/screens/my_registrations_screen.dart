@@ -4,6 +4,9 @@ class MyRegistrationsScreen extends StatelessWidget {
   final int initialIndex;
   const MyRegistrationsScreen({Key? key, required this.initialIndex}) : super(key: key);
 
+  static int utkastTab = 0;
+  static int overforteTab = 1;
+
   static Route route(int initialIndex) {
     return MaterialPageRoute<void>(
         builder: (_) => MyRegistrationsScreen(
