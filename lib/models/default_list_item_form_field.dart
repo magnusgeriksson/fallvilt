@@ -1,4 +1,4 @@
-import 'package:fallvilt/repositories/models/models.dart';
+import 'package:fallvilt/dataservice/models/models.dart';
 import 'package:formz/formz.dart';
 
 enum DefaultListItemValidationError { empty }

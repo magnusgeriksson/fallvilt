@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/bloc.dart';
+import 'dataservice/dataservices.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -22,8 +23,11 @@ class App extends StatelessWidget {
         RepositoryProvider.value(
           value: authenticationRepository,
         ),
-        RepositoryProvider<RegistrationRepository>(
+        RepositoryProvider<IRegistrationRepository>(
           create: (context) => RegistrationRepository(),
+        ),
+        RepositoryProvider<IRegistrationStorageService>(
+          create: (context) => RegistrationStorageService(),
         )
       ],
       child: BlocProvider(

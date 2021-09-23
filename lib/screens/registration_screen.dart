@@ -19,7 +19,7 @@ class RegistrationScreen extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: BlocProvider(
           create: (context) {
-            return RegistrationBloc(registrationRepository: RepositoryProvider.of<RegistrationRepository>(context));
+            return RegistrationBloc(registrationRepository: RepositoryProvider.of<IRegistrationRepository>(context));
           },
           child: const RegistrationForm(),
         ),

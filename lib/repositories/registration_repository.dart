@@ -1,18 +1,27 @@
 import 'dart:async';
 
-import 'models/models.dart';
+import 'package:fallvilt/dataservice/dataservices.dart';
+import 'package:fallvilt/dataservice/models/models.dart';
 
 enum RegistrationStatus { inProgress, done, failed }
 
-class RegistrationRepository {
-  final _controller = StreamController<RegistrationStatus>();
+class RegistrationRepository extends IRegistrationRepository {
+  RegistrationRepository(this._registrationStorageService) {
+    // _registrationStorageService =
+    //     registrationStorageService;
+  }
 
+  final _controller = StreamController<RegistrationStatus>();
+  final IRegistrationStorageService _registrationStorageService;
+
+  @override
   Stream<RegistrationStatus> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
     yield RegistrationStatus.done;
     yield* _controller.stream;
   }
 
+  @override
   Future<List<DefaultListItem>> getListItem(int id) async {
     _controller.add(RegistrationStatus.inProgress);
 
@@ -32,4 +41,23 @@ class RegistrationRepository {
   }
 
   void dispose() => _controller.close();
+
+  //TODO return value from form state
+  @override
+  Future<bool> saveRegistration(Registration registration) async {
+    try {
+      await _registrationStorageService.addRegistration(registration);
+      return true;
+    } on Exception catch (_) {
+      print('Something went wrong');
+      return false;
+    }
+  }
+}
+
+abstract class IRegistrationRepository {
+  Future<List<DefaultListItem>> getListItem(int id);
+  //return status
+  Future<bool> saveRegistration(Registration registration);
+  Stream<RegistrationStatus> get status;
 }

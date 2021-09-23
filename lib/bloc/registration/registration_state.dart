@@ -1,52 +1,44 @@
 part of 'registration_bloc.dart';
 
-// abstract class RegistrationState extends Equatable {
-//   const RegistrationState();
-//
-//   @override
-//   List<Object> get props => [];
-// }
-//
-// class StatusChangedEvent extends RegistrationFormState {
-//   const StatusChangedEvent(this.regStatus);
-//
-//   final RegistrationStatus regStatus;
-//
-//   @override
-//   List<Object> get props => [regStatus];
-// }
-
 class RegistrationFormState extends Equatable {
   const RegistrationFormState(
       {this.status = FormzStatus.pure,
       this.stedsnavn = const StedsnavnTextField.dirty(),
-      this.hendelsesDato = const DateField.pure(),
+      this.hendelsesdato = const HendelsesdatoField.pure(),
+      this.ukjentTidspunkt = false,
       this.arsak = const ArsakListItemFormField.pure(),
       this.kjoretoy = const KjoretoyListItemFormField.pure()});
 
   RegistrationFormState copyWith(
       {FormzStatus? status,
       StedsnavnTextField? stedsnavn,
-      DateField? hendelsesDato,
+      HendelsesdatoField? hendelsesdato,
+      bool? ukjentTidspunkt,
       ArsakListItemFormField? arsak,
       KjoretoyListItemFormField? kjoretoy,
       RegistrationStatus? regStatus}) {
     return RegistrationFormState(
         status: status ?? this.status,
         stedsnavn: stedsnavn ?? this.stedsnavn,
-        hendelsesDato: hendelsesDato ?? this.hendelsesDato,
+        hendelsesdato: hendelsesdato ?? this.hendelsesdato,
+        ukjentTidspunkt: ukjentTidspunkt ?? this.ukjentTidspunkt,
         kjoretoy: kjoretoy ?? this.kjoretoy,
         arsak: arsak ?? this.arsak);
   }
 
+  factory RegistrationFormState.mapFromState(Registration registration) {
+    return RegistrationFormState();
+  }
+
   final FormzStatus status;
   final StedsnavnTextField stedsnavn;
-  final DateField hendelsesDato;
+  final HendelsesdatoField hendelsesdato;
+  final bool ukjentTidspunkt;
   final ArsakListItemFormField arsak;
   final KjoretoyListItemFormField kjoretoy;
 
   @override
-  List<Object> get props => [status, stedsnavn, hendelsesDato, arsak, kjoretoy];
+  List<Object> get props => [status, stedsnavn, hendelsesdato, ukjentTidspunkt, arsak, kjoretoy];
 }
 
 class SetKjotetoyListItem extends RegistrationFormState {}

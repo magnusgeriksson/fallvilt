@@ -34,15 +34,24 @@ class RegistrationStedsnavnChanged extends RegistrationEvent {
   List<Object> get props => [stedsnavn];
 }
 
-// class LoginPasswordChanged extends RegistrationEvent {
-//   const LoginPasswordChanged(this.password);
-//
-//   final String password;
-//
-//   @override
-//   List<Object> get props => [password];
-// }
+class RegistrationHendelsesdatoChanged extends RegistrationEvent {
+  const RegistrationHendelsesdatoChanged(this.hendelsesdato);
 
-class LoginSubmitted extends RegistrationEvent {
-  const LoginSubmitted();
+  final DateTime hendelsesdato;
+
+  @override
+  List<Object> get props => [hendelsesdato];
+}
+
+class RegistrationUkjentTidspunktChanged extends RegistrationEvent {
+  const RegistrationUkjentTidspunktChanged(this.ukjentTidspunkt);
+
+  final bool ukjentTidspunkt;
+
+  @override
+  List<Object> get props => [ukjentTidspunkt];
+}
+
+class SaveSubmitted extends RegistrationEvent {
+  const SaveSubmitted();
 }

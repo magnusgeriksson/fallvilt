@@ -3,6 +3,7 @@ import 'package:fallvilt/models/models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 import 'widgets.dart';
 
@@ -98,7 +99,7 @@ class RegistrationForm extends StatelessWidget {
                     child: FutureBuilder(
                       future: context.read<RegistrationBloc>().getKjoretoyListItem(),
                       builder: (BuildContext context, AsyncSnapshot<List<KjoretoyListItemFormField>> snapshot) {
-                        var widget = snapshot.hasData ? kjoretoyDropdown(snapshot.data) : const Text("ANNEN TEST");
+                        var widget = snapshot.hasData ? kjoretoyDropdown(snapshot.data) : const Text('ANNEN TEST');
 
                         return widget;
                       },
@@ -107,8 +108,15 @@ class RegistrationForm extends StatelessWidget {
                 ],
               ),
             ],
-            // DatePicker(callback: (value) => context.read<RegistrationBloc>().selectDate(value)),
-            DatePicker(callback: (value) {}),
+            DatePicker(
+              callback: (value) {
+                if (value != null) {
+                  return context.read<RegistrationBloc>().add(
+                        RegistrationHendelsesdatoChanged(value),
+                      );
+                }
+              },
+            ),
             Row(
               children: [
                 Expanded(
@@ -119,20 +127,29 @@ class RegistrationForm extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(state.hendelsesDato.value.toString()),
+                  child: Text(state.hendelsesdato.value.toString()),
                 ),
               ],
             ),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: ElevatedButton(
-            //         onPressed: () => context.read<RegistrationBloc>().confirm(),
-            //         child: const Text('CONFIRM'),
-            //       ),
-            //     ),
-            //   ],
-            // ),
+            Switch(
+              value: state.ukjentTidspunkt,
+              onChanged: (bool value) {
+                return context.read<RegistrationBloc>().add(
+                      RegistrationUkjentTidspunktChanged(value),
+                    );
+              },
+            ),
+            if (state.status == FormzStatus.submissionInProgress) ...[const CircularProgressIndicator()],
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => context.read<RegistrationBloc>().add(const SaveSubmitted()),
+                    child: const Text('Lagre'),
+                  ),
+                ),
+              ],
+            ),
           ],
         );
       },
