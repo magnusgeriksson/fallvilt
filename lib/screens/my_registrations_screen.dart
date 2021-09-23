@@ -19,15 +19,15 @@ class MyRegistrationsScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text("Mine registreringer"),
-          bottom: TabBar(labelColor: Colors.green, unselectedLabelColor: Colors.grey.shade100, tabs: [
+          bottom: TabBar(tabs: [
             Tab(
               child: Row(
-                children: [Icon(Icons.text_snippet), Text("Utkast")],
+                children: const [Icon(Icons.text_snippet), Text("Utkast")],
               ),
             ),
             Tab(
               child: Row(
-                children: [Icon(Icons.send), Text("Overførte")],
+                children: const [Icon(Icons.send), Text("Overførte")],
               ),
             ),
           ]),
@@ -36,9 +36,6 @@ class MyRegistrationsScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-                Row(
-                  children: [Text("Utkast"), Text("Overførte")],
-                ),
                 Expanded(
                   child: ListView(
                     children: [
@@ -58,9 +55,6 @@ class MyRegistrationsScreen extends StatelessWidget {
             ),
             Column(
               children: [
-                Row(
-                  children: [Text("Utkast"), Text("Overførte")],
-                ),
                 Expanded(
                   child: ListView(
                     children: [
