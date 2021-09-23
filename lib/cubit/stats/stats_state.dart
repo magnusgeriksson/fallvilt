@@ -15,9 +15,15 @@ class StatsInitial extends StatsState {
 class StatsLoaded extends StatsState {
   final Stats stats;
   const StatsLoaded(this.stats);
+
+  @override
+  List<Object> get props => [stats];
 }
 
 class StatsError extends StatsState {
   final String message;
   const StatsError(this.message);
+
+  @override
+  List<Object> get props => [message];
 }
