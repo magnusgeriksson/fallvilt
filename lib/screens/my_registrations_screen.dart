@@ -1,4 +1,7 @@
+import 'package:fallvilt/cubit/cubit.dart';
+import 'package:fallvilt/repositories/registration_repository_fake.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyRegistrationsScreen extends StatelessWidget {
   final int initialIndex;
@@ -14,78 +17,102 @@ class MyRegistrationsScreen extends StatelessWidget {
             ));
   }
 
+  String getUtkastTekst(RegistrationsState state) {
+    if (state is RegistrationsLoaded) return "Utkast (${state.registrations.utkast.length})";
+    return "Utkast";
+  }
+
+  String getOverforteTekst(RegistrationsState state) {
+    if (state is RegistrationsLoaded) return "Overførte (${state.registrations.overforte.length})";
+    return "Overførte";
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       initialIndex: initialIndex,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Mine registreringer"),
-          bottom: TabBar(tabs: [
-            Tab(
-              child: Row(
-                children: const [Icon(Icons.text_snippet), Text("Utkast")],
-              ),
-            ),
-            Tab(
-              child: Row(
-                children: const [Icon(Icons.send), Text("Overførte")],
-              ),
-            ),
-          ]),
-        ),
-        body: TabBarView(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      RegistrationListElement(date: DateTime.now(), art: "Elg", status: "Mangler info"),
-                      RegistrationListElement(date: DateTime.now(), art: "Elg", status: "Mangler info"),
-                      RegistrationListElement(date: DateTime.now(), art: "Elg", status: "Mangler info"),
-                      RegistrationListElement(date: DateTime.now(), art: "Elg", status: "Mangler info"),
-                      RegistrationListElement(date: DateTime.now(), art: "Elg", status: "Mangler info"),
-                      RegistrationListElement(date: DateTime.now(), art: "Elg", status: "Mangler info"),
-                      RegistrationListElement(date: DateTime.now(), art: "Elg", status: "Mangler info"),
-                      RegistrationListElement(date: DateTime.now(), art: "Elg", status: "Mangler info"),
-                      RegistrationListElement(date: DateTime.now(), art: "Elg", status: "Mangler info"),
-                    ],
+      child: BlocProvider(
+        create: (context) => RegistrationsCubit(RegistrationRepositoryFake())..loadRegistrations(),
+        child: BlocBuilder<RegistrationsCubit, RegistrationsState>(
+          builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text("Mine registreringer"),
+                bottom: TabBar(tabs: [
+                  Tab(
+                    child: Row(
+                      children: [const Icon(Icons.text_snippet), Text(getUtkastTekst(state))],
+                    ),
                   ),
-                )
-              ],
-            ),
-            Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      RegistrationListElement(date: DateTime.now(), art: "Villrein", status: "overført"),
-                      RegistrationListElement(date: DateTime.now(), art: "Villrein", status: "overført"),
-                      RegistrationListElement(date: DateTime.now(), art: "Villrein", status: "overført"),
-                      RegistrationListElement(date: DateTime.now(), art: "Villrein", status: "overført"),
-                    ],
+                  Tab(
+                    child: Row(
+                      children: [const Icon(Icons.send), Text(getOverforteTekst(state))],
+                    ),
                   ),
-                )
-              ],
-            ),
-          ],
-        ),
-        bottomNavigationBar: Row(
-          children: [IconButton(onPressed: () => print(""), icon: const Icon(Icons.refresh))],
+                ]),
+              ),
+              body: buildBody(state),
+              bottomNavigationBar: Row(
+                children: [IconButton(onPressed: () => print(""), icon: const Icon(Icons.refresh))],
+              ),
+            );
+          },
         ),
       ),
     );
   }
 }
 
-class RegistrationListElement extends StatelessWidget {
+Widget buildBody(RegistrationsState state) {
+  if (state is RegistrationsLoaded) {
+    return TabBarView(
+      children: [
+        Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: List.generate(
+                    state.registrations.utkast.length,
+                    (i) => RegistrationListElementWidget(
+                          date: state.registrations.utkast[i].dato,
+                          art: state.registrations.utkast[i].art,
+                          status: state.registrations.utkast[i].status.label,
+                        )),
+              ),
+            )
+          ],
+        ),
+        Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: List.generate(
+                    state.registrations.overforte.length,
+                    (i) => RegistrationListElementWidget(
+                          date: state.registrations.overforte[i].dato,
+                          art: state.registrations.overforte[i].art,
+                          status: state.registrations.overforte[i].status.label,
+                        )),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  } else {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class RegistrationListElementWidget extends StatelessWidget {
   final DateTime date;
   final String art;
   final String status;
 
-  const RegistrationListElement({Key? key, required this.date, required this.art, required this.status})
+  const RegistrationListElementWidget({Key? key, required this.date, required this.art, required this.status})
       : super(key: key);
 
   @override

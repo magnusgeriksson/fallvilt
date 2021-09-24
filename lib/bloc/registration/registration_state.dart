@@ -28,7 +28,7 @@ class RegistrationFormState extends Equatable {
       DateField? hendelsesDato,
       ArsakListItemFormField? arsak,
       KjoretoyListItemFormField? kjoretoy,
-      RegistrationStatus? regStatus}) {
+      Object? regStatus}) {
     return RegistrationFormState(
         status: status ?? this.status,
         hendelsesDato: hendelsesDato ?? this.hendelsesDato,
