@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fallvilt/dataservice/registration_storage_service_moor.dart';
 import 'package:fallvilt/models/models.dart';
 import 'package:fallvilt/repositories/repositories.dart';
 import 'package:formz/formz.dart';
@@ -11,34 +12,18 @@ part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
   RegistrationBloc({
-    required RegistrationRepository registrationRepository,
+    required IRegistrationRepository registrationRepository,
   })  : _registrationRepository = registrationRepository,
         super(const RegistrationFormState());
 
-  final RegistrationRepository _registrationRepository;
-
-  // @override
-  // Stream<RegistrationFormState> mapEventToState(
-  //   RegistrationEvent event,
-  // ) async* {
-  //   if (event is RegistrationKjoretoyChanged) {
-  //     print(event);
-  //
-  //     yield _mapKjoretoyChangedToState(event, state);
-  //   }
-  //   // else if (event is LoginPasswordChanged) {
-  //   //   yield _mapPasswordChangedToState(event, state);
-  //   // } else if (event is LoginSubmitted) {
-  //   //   yield* _mapLoginSubmittedToState(event, state);
-  //   // }
-  // }
+  final IRegistrationRepository _registrationRepository;
 
   RegistrationFormState _mapArsakChangedToState(
     RegistrationArsakChanged event,
     RegistrationFormState state,
   ) {
     return state.copyWith(
-      status: Formz.validate([state.hendelsesDato]),
+      // status: Formz.validate([state.hendelsesDato]),
       arsak: event.arsak,
     );
   }
@@ -48,8 +33,39 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
     RegistrationFormState state,
   ) {
     return state.copyWith(
-      status: Formz.validate([state.hendelsesDato]),
+      // status: Formz.validate([state.hendelsesDato]),
       kjoretoy: event.kjoretoy,
+    );
+  }
+
+  RegistrationFormState _mapStedsnavnChangedToState(
+    RegistrationStedsnavnChanged event,
+    RegistrationFormState state,
+  ) {
+    var stedsnavn = StedsnavnTextField.dirty(event.stedsnavn);
+
+    return state.copyWith(
+      stedsnavn: stedsnavn,
+    );
+  }
+
+  RegistrationFormState _mapHendelsesdatoChangedToState(
+    RegistrationHendelsesdatoChanged event,
+    RegistrationFormState state,
+  ) {
+    var stedsnavn = HendelsesdatoField.dirty(event.hendelsesdato);
+
+    return state.copyWith(
+      hendelsesdato: stedsnavn,
+    );
+  }
+
+  RegistrationFormState _mapUkjentTidspunktChangedToState(
+    RegistrationUkjentTidspunktChanged event,
+    RegistrationFormState state,
+  ) {
+    return state.copyWith(
+      ukjentTidspunkt: event.ukjentTidspunkt,
     );
   }
 
@@ -64,6 +80,22 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
     if (event is RegistrationArsakChanged) {
       print(event);
       yield _mapArsakChangedToState(event, state);
+    }
+    if (event is RegistrationStedsnavnChanged) {
+      print(event);
+      yield _mapStedsnavnChangedToState(event, state);
+    }
+    if (event is RegistrationHendelsesdatoChanged) {
+      print(event);
+      yield _mapHendelsesdatoChangedToState(event, state);
+    }
+    if (event is RegistrationUkjentTidspunktChanged) {
+      print(event);
+      yield _mapUkjentTidspunktChangedToState(event, state);
+    }
+    if (event is SaveSubmitted) {
+      print(event);
+      yield* _mapSaveSubmittedToState(event, state);
     }
   }
 
@@ -83,32 +115,22 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
     return mappedListItemFormFields;
   }
 
-  // LoginState _mapPasswordChangedToState(
-  //     LoginPasswordChanged event,
-  //     LoginState state,
-  //     ) {
-  //   final password = Password.dirty(event.password);
-  //   return state.copyWith(
-  //     password: password,
-  //     status: Formz.validate([password, state.username]),
-  //   );
-  // }
-  //
-  // Stream<LoginState> _mapLoginSubmittedToState(
-  //     LoginSubmitted event,
-  //     LoginState state,
-  //     ) async* {
-  //   if (state.status.isValidated) {
-  //     yield state.copyWith(status: FormzStatus.submissionInProgress);
-  //     try {
-  //       await _authenticationRepository.logIn(
-  //         username: state.username.value,
-  //         password: state.password.value,
-  //       );
-  //       yield state.copyWith(status: FormzStatus.submissionSuccess);
-  //     } on Exception catch (_) {
-  //       yield state.copyWith(status: FormzStatus.submissionFailure);
-  //     }
-  //   }
-  // }
+  Stream<List<Registration>> get watchAllRegistrations => _registrationRepository.watchAllRegistration;
+
+  Stream<RegistrationFormState> _mapSaveSubmittedToState(
+    SaveSubmitted event,
+    RegistrationFormState state,
+  ) async* {
+    yield state.copyWith(status: FormzStatus.submissionInProgress);
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+
+      var dummyRegistration = Registration(name: "test", completed: true);
+      await _registrationRepository.saveRegistration(dummyRegistration);
+
+      yield state.copyWith(status: FormzStatus.submissionSuccess);
+    } on Exception catch (_) {
+      yield state.copyWith(status: FormzStatus.submissionFailure);
+    }
+  }
 }

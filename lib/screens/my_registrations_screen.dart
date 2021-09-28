@@ -3,6 +3,8 @@ import 'package:fallvilt/models/registration_list_model.dart';
 import 'package:fallvilt/repositories/registration_repository_fake.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
+
 
 class MyRegistrationsScreen extends StatelessWidget {
   final int initialIndex;
@@ -18,6 +20,7 @@ class MyRegistrationsScreen extends StatelessWidget {
             ));
   }
 
+
   String getUtkastTekst(RegistrationsState state) {
     if (state is RegistrationsLoaded) return "Utkast (${state.registrations.utkast.length})";
     return "Utkast";
@@ -27,6 +30,7 @@ class MyRegistrationsScreen extends StatelessWidget {
     if (state is RegistrationsLoaded) return "Overførte (${state.registrations.overforte.length})";
     return "Overførte";
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -197,6 +201,7 @@ class RegistrationListElementWidget extends StatelessWidget {
 
   const RegistrationListElementWidget(
       {Key? key, required this.id, required this.date, required this.art, required this.status})
+
       : super(key: key);
 
   @override

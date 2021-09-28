@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:fallvilt/dataservice/registration_storage_service_moor.dart';
 import 'package:fallvilt/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 
@@ -10,5 +11,6 @@ void main() {
   runApp(App(
     authenticationRepository: AuthenticationRepository(),
     userRepository: UserRepository(),
+    registrationStorageService: AppDatabase(),
   ));
 }
