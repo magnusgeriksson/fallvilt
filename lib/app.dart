@@ -32,9 +32,6 @@ class App extends StatelessWidget {
           create: (context) =>
               RegistrationRepository(registrationStorageService, registrationStorageService.instanceRegistrationDao()),
         ),
-        // RepositoryProvider<IRegistrationStorageService>(
-        //   create: (context) => RegistrationStorageService(),
-        // )
       ],
       child: BlocProvider(
         create: (_) => AuthenticationBloc(

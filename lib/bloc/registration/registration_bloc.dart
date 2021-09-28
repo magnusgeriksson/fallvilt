@@ -115,7 +115,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
     return mappedListItemFormFields;
   }
 
-  Stream<List<Registration>> watchAllRegistrations() => _registrationRepository.watchAllRegistration();
+  Stream<List<Registration>> get watchAllRegistrations => _registrationRepository.watchAllRegistration;
 
   Stream<RegistrationFormState> _mapSaveSubmittedToState(
     SaveSubmitted event,

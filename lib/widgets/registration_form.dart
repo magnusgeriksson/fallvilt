@@ -14,7 +14,7 @@ class RegistrationForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final widget = StreamBuilder(
-      stream: context.read<RegistrationBloc>().watchAllRegistrations(),
+      stream: context.read<RegistrationBloc>().watchAllRegistrations,
       builder: (context, AsyncSnapshot<List<Registration>> snapshot) {
         return ListView.builder(
           shrinkWrap: true,

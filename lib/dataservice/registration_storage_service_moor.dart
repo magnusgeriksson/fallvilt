@@ -20,8 +20,6 @@ class Registrations extends Table {
 
   BoolColumn get completed => boolean().withDefault(const Constant(false))();
 
-  // IntColumn get id => integer().autoIncrement().call();
-
   // @override
   // Set<Column> get primaryKey => {id, name};
 }
@@ -47,42 +45,15 @@ class AppDatabase extends _$AppDatabase implements IAppDatabase {
   @override
   Future<List<Registration>> getAllRegistration() => select(registrations).get();
   @override
-  Stream<List<Registration>> watchAllRegistration() => select(registrations).watch();
-  // @override
-  // Future<int> insertRegistration(Registration registration) => into(registrations).insert(registration);
+  Stream<List<Registration>> get watchAllRegistration => select(registrations).watch();
   Future updateTask(Registration registration) => update(registrations).replace(registration);
 
   @override
   IRegistrationDao instanceRegistrationDao() => registrationDao;
-
-  // @override
-  // late IRegistrationDao instanceRegistrationDao => RegistrationDao(this);
 }
 
 abstract class IAppDatabase {
   Future<List<Registration>> getAllRegistration();
-  // Future<int> insertRegistration(Registration registration);
   IRegistrationDao instanceRegistrationDao();
-  Stream<List<Registration>> watchAllRegistration();
+  Stream<List<Registration>> get watchAllRegistration;
 }
-
-// part 'todos_dao.g.dart';
-//
-// // the _TodosDaoMixin will be created by moor. It contains all the necessary
-// // fields for the tables. The <MyDatabase> type annotation is the database class
-// // that should use this dao.
-// @UseDao(tables: [Todos])
-// class TodosDao extends DatabaseAccessor<MyDatabase> with _$TodosDaoMixin {
-//   // this constructor is required so that the main database can create an instance
-//   // of this object.
-//   TodosDao(MyDatabase db) : super(db);
-//
-//   Stream<List<TodoEntry>> todosInCategory(Category category) {
-//     if (category == null) {
-//       return (select(todos)..where((t) => isNull(t.category))).watch();
-//     } else {
-//       return (select(todos)..where((t) => t.category.equals(category.id)))
-//           .watch();
-//     }
-//   }
-// }

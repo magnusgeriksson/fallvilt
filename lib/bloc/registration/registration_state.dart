@@ -26,9 +26,9 @@ class RegistrationFormState extends Equatable {
         arsak: arsak ?? this.arsak);
   }
 
-  // factory RegistrationFormState.mapFromState(RegistrationModel registration) {
-  //   return RegistrationFormState();
-  // }
+  factory RegistrationFormState.mapFromState(Registration registration) {
+    return RegistrationFormState(stedsnavn: StedsnavnTextField.dirty(registration.name));
+  }
 
   final FormzStatus status;
   final StedsnavnTextField stedsnavn;
@@ -42,42 +42,3 @@ class RegistrationFormState extends Equatable {
 }
 
 class SetKjotetoyListItem extends RegistrationFormState {}
-
-// class ValidateEvent extends RegistrationState {}
-//
-// class ArsakEvent extends RegistrationState {
-//   const ArsakEvent(this.text);
-//
-//   final String text;
-//
-//   @override
-//   List<Object> get props => [text];
-// }
-
-// class DetteErEnRegistrationEvent extends RegistrationState {
-//   const DetteErEnRegistrationEvent(this.text);
-//
-//   final String text;
-//
-//   @override
-//   List<Object> get props => [text];
-// }
-//
-// class LoadingState extends RegistrationState {
-//   @override
-//   List<Object> get props => [];
-// }
-//
-// class LoadedState extends RegistrationState {
-//   LoadedState();
-//
-//   // final List<MovieModel> movies;
-//
-//   @override
-//   List<Object> get props => [];
-// }
-//
-// class ErrorState extends RegistrationState {
-//   @override
-//   List<Object> get props => [];
-// }

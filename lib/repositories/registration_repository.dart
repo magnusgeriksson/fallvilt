@@ -7,10 +7,7 @@ import 'package:fallvilt/dataservice/registration_storage_service_moor.dart';
 enum RegistrationStatus { inProgress, done, failed }
 
 class RegistrationRepository extends IRegistrationRepository {
-  RegistrationRepository(this._registrationStorageService, this._registrationDao) {
-    // _registrationStorageService =
-    //     registrationStorageService;
-  }
+  RegistrationRepository(this._registrationStorageService, this._registrationDao) {}
 
   final _controller = StreamController<RegistrationStatus>();
   final IAppDatabase _registrationStorageService;
@@ -57,35 +54,12 @@ class RegistrationRepository extends IRegistrationRepository {
   }
 
   @override
-  Stream<List<Registration>> watchAllRegistration() {
-    var test = _registrationStorageService.watchAllRegistration();
-
-    return test;
-  }
-
-  // @override
-  // TODO: implement watchAllRegistrations
-  // Stream<List<Registration>> get watchAllRegistrations => _registrationStorageService.watchAllRegistration();
-
-  // StreamBuilder<List<RegistrationModel>> watchRegistrations(BuildContext context) {
-  //   return StreamBuilder(
-  //       stream: _registrationStorageService.watchAllRegistration(),
-  //       builder: (context, AsyncSnapshot<List<Registration>> snapshot) {
-  //
-  //         final registrations = snapshot.data ?? [];
-  //
-  //         return ListView.builder(
-  //           itemCount:
-  //         )
-  //       });
-  // }
+  Stream<List<Registration>> get watchAllRegistration => _registrationStorageService.watchAllRegistration;
 }
 
 abstract class IRegistrationRepository {
   Future<List<DefaultListItem>> getListItem(int id);
-  //return status
   Future<bool> saveRegistration(Registration registration);
   Stream<RegistrationStatus> get status;
-  // Stream<List<Registration>> get watchAllRegistrations;
-  Stream<List<Registration>> watchAllRegistration();
+  Stream<List<Registration>> get watchAllRegistration;
 }
