@@ -1,19 +1,21 @@
 import 'package:fallvilt/repositories/repositories.dart';
-import 'package:fallvilt/screens/login_screen.dart';
 import 'package:fallvilt/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/bloc.dart';
+import 'dataservice/registration_storage_service_moor.dart';
 
 class App extends StatelessWidget {
   const App({
     Key? key,
     required this.authenticationRepository,
     required this.userRepository,
+    required this.registrationStorageService,
   }) : super(key: key);
 
   final AuthenticationRepository authenticationRepository;
+  final IAppDatabase registrationStorageService;
   final UserRepository userRepository;
 
   @override
@@ -23,9 +25,13 @@ class App extends StatelessWidget {
         RepositoryProvider.value(
           value: authenticationRepository,
         ),
-        RepositoryProvider<RegistrationRepository>(
-          create: (context) => RegistrationRepository(),
-        )
+        RepositoryProvider.value(
+          value: registrationStorageService,
+        ),
+        RepositoryProvider<IRegistrationRepository>(
+          create: (context) =>
+              RegistrationRepository(registrationStorageService, registrationStorageService.instanceRegistrationDao()),
+        ),
       ],
       child: BlocProvider(
         create: (_) => AuthenticationBloc(
@@ -66,7 +72,7 @@ class _AppViewState extends State<AppView> {
                   break;
                 case AuthenticationStatus.unauthenticated:
                   _navigator.pushAndRemoveUntil<void>(
-                    LoginScreen.route(),
+                    RegistrationScreen.route(),
                     (route) => false,
                   );
                   break;

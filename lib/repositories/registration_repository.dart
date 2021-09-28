@@ -1,18 +1,26 @@
 import 'dart:async';
 
-import 'models/models.dart';
+import 'package:fallvilt/dataservice/daos/registrering_dao.dart';
+import 'package:fallvilt/dataservice/models/models.dart';
+import 'package:fallvilt/dataservice/registration_storage_service_moor.dart';
 
 enum RegistrationStatus { inProgress, done, failed }
 
-class RegistrationRepository {
-  final _controller = StreamController<RegistrationStatus>();
+class RegistrationRepository extends IRegistrationRepository {
+  RegistrationRepository(this._registrationStorageService, this._registrationDao) {}
 
+  final _controller = StreamController<RegistrationStatus>();
+  final IAppDatabase _registrationStorageService;
+  final IRegistrationDao _registrationDao;
+
+  @override
   Stream<RegistrationStatus> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
     yield RegistrationStatus.done;
     yield* _controller.stream;
   }
 
+  @override
   Future<List<DefaultListItem>> getListItem(int id) async {
     _controller.add(RegistrationStatus.inProgress);
 
@@ -32,4 +40,26 @@ class RegistrationRepository {
   }
 
   void dispose() => _controller.close();
+
+  //TODO return value from form state
+  @override
+  Future<bool> saveRegistration(Registration registration) async {
+    try {
+      await _registrationDao.insertRegistration(registration);
+      return true;
+    } on Exception catch (_) {
+      print('Something went wrong');
+      return false;
+    }
+  }
+
+  @override
+  Stream<List<Registration>> get watchAllRegistration => _registrationStorageService.watchAllRegistration;
+}
+
+abstract class IRegistrationRepository {
+  Future<List<DefaultListItem>> getListItem(int id);
+  Future<bool> saveRegistration(Registration registration);
+  Stream<RegistrationStatus> get status;
+  Stream<List<Registration>> get watchAllRegistration;
 }

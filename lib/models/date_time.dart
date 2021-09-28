@@ -11,3 +11,8 @@ class DateField extends FormzInput<DateTime?, DateTimeValidationError> {
     return value != null ? null : DateTimeValidationError.empty;
   }
 }
+
+class HendelsesdatoField extends DateField {
+  const HendelsesdatoField.pure() : super.pure();
+  const HendelsesdatoField.dirty([DateTime? value]) : super.dirty(value);
+}

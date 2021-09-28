@@ -1,87 +1,44 @@
 part of 'registration_bloc.dart';
 
-// abstract class RegistrationState extends Equatable {
-//   const RegistrationState();
-//
-//   @override
-//   List<Object> get props => [];
-// }
-//
-// class StatusChangedEvent extends RegistrationFormState {
-//   const StatusChangedEvent(this.regStatus);
-//
-//   final RegistrationStatus regStatus;
-//
-//   @override
-//   List<Object> get props => [regStatus];
-// }
-
 class RegistrationFormState extends Equatable {
   const RegistrationFormState(
       {this.status = FormzStatus.pure,
-      this.hendelsesDato = const DateField.pure(),
+      this.stedsnavn = const StedsnavnTextField.dirty(),
+      this.hendelsesdato = const HendelsesdatoField.pure(),
+      this.ukjentTidspunkt = false,
       this.arsak = const ArsakListItemFormField.pure(),
       this.kjoretoy = const KjoretoyListItemFormField.pure()});
 
   RegistrationFormState copyWith(
       {FormzStatus? status,
-      DateField? hendelsesDato,
+      StedsnavnTextField? stedsnavn,
+      HendelsesdatoField? hendelsesdato,
+      bool? ukjentTidspunkt,
       ArsakListItemFormField? arsak,
       KjoretoyListItemFormField? kjoretoy,
       RegistrationStatus? regStatus}) {
     return RegistrationFormState(
         status: status ?? this.status,
-        hendelsesDato: hendelsesDato ?? this.hendelsesDato,
+        stedsnavn: stedsnavn ?? this.stedsnavn,
+        hendelsesdato: hendelsesdato ?? this.hendelsesdato,
+        ukjentTidspunkt: ukjentTidspunkt ?? this.ukjentTidspunkt,
         kjoretoy: kjoretoy ?? this.kjoretoy,
         arsak: arsak ?? this.arsak);
   }
 
+  factory RegistrationFormState.mapFromState(Registration registration) {
+    return RegistrationFormState(stedsnavn: StedsnavnTextField.dirty(registration.name));
+  }
+
   final FormzStatus status;
-  final DateField hendelsesDato;
+  final StedsnavnTextField stedsnavn;
+  final HendelsesdatoField hendelsesdato;
+  final bool ukjentTidspunkt;
   final ArsakListItemFormField arsak;
   final KjoretoyListItemFormField kjoretoy;
 
   @override
-  List<Object> get props => [status, hendelsesDato, arsak, kjoretoy];
+  List<Object> get props => [status, stedsnavn, hendelsesdato, ukjentTidspunkt, arsak, kjoretoy];
 }
 
 class SetKjotetoyListItem extends RegistrationFormState {}
-
-// class ValidateEvent extends RegistrationState {}
-//
-// class ArsakEvent extends RegistrationState {
-//   const ArsakEvent(this.text);
-//
-//   final String text;
-//
-//   @override
-//   List<Object> get props => [text];
-// }
-
-// class DetteErEnRegistrationEvent extends RegistrationState {
-//   const DetteErEnRegistrationEvent(this.text);
-//
-//   final String text;
-//
-//   @override
-//   List<Object> get props => [text];
-// }
-//
-// class LoadingState extends RegistrationState {
-//   @override
-//   List<Object> get props => [];
-// }
-//
-// class LoadedState extends RegistrationState {
-//   LoadedState();
-//
-//   // final List<MovieModel> movies;
-//
-//   @override
-//   List<Object> get props => [];
-// }
-//
-// class ErrorState extends RegistrationState {
-//   @override
-//   List<Object> get props => [];
-// }
