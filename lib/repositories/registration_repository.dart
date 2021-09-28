@@ -1,18 +1,20 @@
 import 'dart:async';
 
-import 'package:fallvilt/dataservice/dataservices.dart';
+import 'package:fallvilt/dataservice/daos/registrering_dao.dart';
 import 'package:fallvilt/dataservice/models/models.dart';
+import 'package:fallvilt/dataservice/registration_storage_service_moor.dart';
 
 enum RegistrationStatus { inProgress, done, failed }
 
 class RegistrationRepository extends IRegistrationRepository {
-  RegistrationRepository(this._registrationStorageService) {
+  RegistrationRepository(this._registrationStorageService, this._registrationDao) {
     // _registrationStorageService =
     //     registrationStorageService;
   }
 
   final _controller = StreamController<RegistrationStatus>();
-  final IRegistrationStorageService _registrationStorageService;
+  final IAppDatabase _registrationStorageService;
+  final IRegistrationDao _registrationDao;
 
   @override
   Stream<RegistrationStatus> get status async* {
@@ -46,13 +48,37 @@ class RegistrationRepository extends IRegistrationRepository {
   @override
   Future<bool> saveRegistration(Registration registration) async {
     try {
-      await _registrationStorageService.addRegistration(registration);
+      await _registrationDao.insertRegistration(registration);
       return true;
     } on Exception catch (_) {
       print('Something went wrong');
       return false;
     }
   }
+
+  @override
+  Stream<List<Registration>> watchAllRegistration() {
+    var test = _registrationStorageService.watchAllRegistration();
+
+    return test;
+  }
+
+  // @override
+  // TODO: implement watchAllRegistrations
+  // Stream<List<Registration>> get watchAllRegistrations => _registrationStorageService.watchAllRegistration();
+
+  // StreamBuilder<List<RegistrationModel>> watchRegistrations(BuildContext context) {
+  //   return StreamBuilder(
+  //       stream: _registrationStorageService.watchAllRegistration(),
+  //       builder: (context, AsyncSnapshot<List<Registration>> snapshot) {
+  //
+  //         final registrations = snapshot.data ?? [];
+  //
+  //         return ListView.builder(
+  //           itemCount:
+  //         )
+  //       });
+  // }
 }
 
 abstract class IRegistrationRepository {
@@ -60,4 +86,6 @@ abstract class IRegistrationRepository {
   //return status
   Future<bool> saveRegistration(Registration registration);
   Stream<RegistrationStatus> get status;
+  // Stream<List<Registration>> get watchAllRegistrations;
+  Stream<List<Registration>> watchAllRegistration();
 }

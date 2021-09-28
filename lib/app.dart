@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/bloc.dart';
-import 'dataservice/dataservices.dart';
+import 'dataservice/registration_storage_service_moor.dart';
 
 class App extends StatelessWidget {
   const App({
     Key? key,
     required this.authenticationRepository,
     required this.userRepository,
+    required this.registrationStorageService,
   }) : super(key: key);
 
   final AuthenticationRepository authenticationRepository;
+  final IAppDatabase registrationStorageService;
   final UserRepository userRepository;
 
   @override
@@ -23,12 +25,16 @@ class App extends StatelessWidget {
         RepositoryProvider.value(
           value: authenticationRepository,
         ),
-        RepositoryProvider<IRegistrationRepository>(
-          create: (context) => RegistrationRepository(),
+        RepositoryProvider.value(
+          value: registrationStorageService,
         ),
-        RepositoryProvider<IRegistrationStorageService>(
-          create: (context) => RegistrationStorageService(),
-        )
+        RepositoryProvider<IRegistrationRepository>(
+          create: (context) =>
+              RegistrationRepository(registrationStorageService, registrationStorageService.instanceRegistrationDao()),
+        ),
+        // RepositoryProvider<IRegistrationStorageService>(
+        //   create: (context) => RegistrationStorageService(),
+        // )
       ],
       child: BlocProvider(
         create: (_) => AuthenticationBloc(

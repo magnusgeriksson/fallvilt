@@ -1,4 +1,5 @@
 import 'package:fallvilt/bloc/registration/registration_bloc.dart';
+import 'package:fallvilt/dataservice/registration_storage_service_moor.dart';
 import 'package:fallvilt/models/models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,38 @@ class RegistrationForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final widget = StreamBuilder(
+      stream: context.read<RegistrationBloc>().watchAllRegistrations(),
+      builder: (context, AsyncSnapshot<List<Registration>> snapshot) {
+        return ListView.builder(
+          shrinkWrap: true,
+          itemBuilder: (_, index) {
+            return Card(
+              color: Colors.orangeAccent,
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Text('${index + 1}'),
+                  radius: 20,
+                ),
+                title: Text(snapshot.data?[index].name ?? ""),
+                subtitle: Text("Rs. ${snapshot.data?[index].name}"),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: () {
+                    // setState(() {
+                    //   AppDatabase().deleteOrder(snapshot.data[index]);
+                    // });
+                  },
+                  color: Colors.red,
+                ),
+              ),
+            );
+          },
+          itemCount: snapshot.data?.length ?? 0,
+        );
+      },
+    );
+
     return BlocBuilder<RegistrationBloc, RegistrationFormState>(
       builder: (context, state) {
         Widget arsakDropdown(List<ArsakListItemFormField>? items) {
@@ -24,7 +57,6 @@ class RegistrationForm extends StatelessWidget {
 
           var dropdown = DropdownButtonFormField<ArsakListItemFormField>(
             items: listItems,
-            // onChanged: (value) => context.read<RegistrationBloc>().setSelectedListItem(value),
             onChanged: (value) {
               if (value == null) return;
               context.read<RegistrationBloc>().add(RegistrationArsakChanged(value));
@@ -77,6 +109,11 @@ class RegistrationForm extends StatelessWidget {
                 labelText: 'Stedsnavn',
                 errorText: state.stedsnavn.invalid ? ' ' : null,
               ),
+            ),
+            Row(
+              children: [
+                Expanded(child: widget),
+              ],
             ),
             Row(
               children: [

@@ -26,9 +26,9 @@ class RegistrationFormState extends Equatable {
         arsak: arsak ?? this.arsak);
   }
 
-  factory RegistrationFormState.mapFromState(Registration registration) {
-    return RegistrationFormState();
-  }
+  // factory RegistrationFormState.mapFromState(RegistrationModel registration) {
+  //   return RegistrationFormState();
+  // }
 
   final FormzStatus status;
   final StedsnavnTextField stedsnavn;

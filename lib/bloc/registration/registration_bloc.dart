@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fallvilt/dataservice/models/models.dart';
+import 'package:fallvilt/dataservice/registration_storage_service_moor.dart';
 import 'package:fallvilt/models/models.dart';
 import 'package:fallvilt/repositories/repositories.dart';
 import 'package:formz/formz.dart';
@@ -17,22 +17,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
         super(const RegistrationFormState());
 
   final IRegistrationRepository _registrationRepository;
-
-  // @override
-  // Stream<RegistrationFormState> mapEventToState(
-  //   RegistrationEvent event,
-  // ) async* {
-  //   if (event is RegistrationKjoretoyChanged) {
-  //     print(event);
-  //
-  //     yield _mapKjoretoyChangedToState(event, state);
-  //   }
-  //   // else if (event is LoginPasswordChanged) {
-  //   //   yield _mapPasswordChangedToState(event, state);
-  //   // } else if (event is LoginSubmitted) {
-  //   //   yield* _mapLoginSubmittedToState(event, state);
-  //   // }
-  // }
 
   RegistrationFormState _mapArsakChangedToState(
     RegistrationArsakChanged event,
@@ -131,25 +115,22 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationFormState> {
     return mappedListItemFormFields;
   }
 
+  Stream<List<Registration>> watchAllRegistrations() => _registrationRepository.watchAllRegistration();
+
   Stream<RegistrationFormState> _mapSaveSubmittedToState(
     SaveSubmitted event,
     RegistrationFormState state,
   ) async* {
-    // if (state.status.isValidated) {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
       await Future.delayed(const Duration(seconds: 2));
 
-      await _registrationRepository.saveRegistration(Registration.mapFromState(state));
-      // await _authenticationRepository.logIn(
-      //   username: state.username.value,
-      //   password: state.password.value,
-      // );
+      var dummyRegistration = Registration(name: "test", completed: true);
+      await _registrationRepository.saveRegistration(dummyRegistration);
 
       yield state.copyWith(status: FormzStatus.submissionSuccess);
     } on Exception catch (_) {
       yield state.copyWith(status: FormzStatus.submissionFailure);
     }
-    // }
   }
 }
